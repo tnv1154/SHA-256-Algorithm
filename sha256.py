@@ -82,5 +82,53 @@ def step_2(padded_text):
     for block in blocks:
         w = [0] * 64
 
+        #Sao chép khối vào 16 từ (512 bit : dữ liệu + độ dài) đầu tiên
+        for i in range(16):
+            w[i] = int.from_bytes(block[i * 4: (i + 1) * 4], byteorder='big')
 
+        #Mở rộng lịch tin nhắn
+        for i in range(16, 64):
+            """s0 = (w[i-15] rightrotate 7) xor (w[i-15] rightrotate 18) xor (w[i-15] rightshift 3)
+                s1 = (w[i- 2] rightrotate 17) xor (w[i- 2] rightrotate 19) xor (w[i- 2] rightshift 10)
+                w[i] = w[i-16] + s0 + w[i-7] + s1"""
+            w[i] = ( w[i-16] + gamma0(i-15) + w[i-7] + gamma1(i-2) ) & 0xFFFFFFFF
+
+        #Khởi tạo biến
+        a, b, c, d, e, f, g, h = h0, h1, h2, h3, h4, h5, h6, h7
+        #Vòng lặp nén chính
+        for i in range(64):
+            temp1 = (h + sigma1(e) + ch(e, f, g) + K[i] + w[i]) & 0xFFFFFFFF
+            temp2 = (sigma0(e) + maj(a, b, c)) & 0xFFFFFFFF
+
+            h = g
+            g = f
+            f = e
+            e = (d + temp1) & 0xFFFFFFFF
+            d = c
+            c = b
+            b = a
+            a = (temp1 + temp2) & 0xFFFFFFFF
+
+        #Thêm giá trị vào hash hiện tại
+        h0 = (h0 + a) & 0xFFFFFFFF
+        h1 = (h1 + b) & 0xFFFFFFFF
+        h2 = (h2 + c) & 0xFFFFFFFF
+        h3 = (h3 + d) & 0xFFFFFFFF
+        h4 = (h4 + e) & 0xFFFFFFFF
+        h5 = (h5 + f) & 0xFFFFFFFF
+        h6 = (h6 + g) & 0xFFFFFFFF
+        h7 = (h7 + h) & 0xFFFFFFFF
+
+    #Nối các giá trị hash => kết quả cuối
+    digest = ""
+    for h in [h0, h1, h2, h3, h4, h5, h6, h7]:
+        digest += format(h, '08x')
+
+    return digest
+
+if __name__ == '__main__':
+    text = input("Nhập xâu cần mã hóa")
+    padded_text = step_1(text)
+    digest = step_2(padded_text)
+    print(digest)
 
