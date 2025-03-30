@@ -3,7 +3,7 @@
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 
-from AI import sha256, hash_file
+from sha256 import sha256, hash_file
 
 def main():
     print("=== CHƯƠNG TRÌNH MÃ HÓA SHA-256 ===")
