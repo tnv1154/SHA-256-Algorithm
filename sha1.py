@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# Chương trình mã hóa SHA-1
-
 # Các hằng số ban đầu cho SHA-1
 H0 = [
     0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0
@@ -8,7 +5,6 @@ H0 = [
 
 def rotate_left(value, shift):
     """Xoay xâu nhị phân value, shift bit sang trái"""
-    # SHA-1 sử dụng phép xoay trái thay vì xoay phải như SHA-256
     return ((value << shift) | (value >> (32 - shift))) & 0xFFFFFFFF
 
 def ch(e, f, g):
@@ -16,7 +12,7 @@ def ch(e, f, g):
     return (e & f) ^ (~e & g)
 
 def parity(a, b, c):
-    """Hàm tính parity = a xor b xor c (sử dụng ở SHA-1)"""
+    """Hàm tính parity = a xor b xor c """
     return a ^ b ^ c
 
 def maj(a, b, c):
@@ -54,7 +50,7 @@ def step_2(padded_text):
     h0, h1, h2, h3, h4 = H0
 
     for block in blocks:
-        w = [0] * 80  # SHA-1 sử dụng 80 từ thay vì 64 từ như SHA-256
+        w = [0] * 80
 
         # Sao chép khối vào 16 từ (512 bit) đầu tiên
         for i in range(16):
@@ -62,7 +58,6 @@ def step_2(padded_text):
 
         # Mở rộng lịch tin nhắn cho SHA-1
         for i in range(16, 80):
-            # SHA-1 có cách mở rộng khác với SHA-256
             w[i] = rotate_left(w[i-3] ^ w[i-8] ^ w[i-14] ^ w[i-16], 1)
 
         # Khởi tạo biến
@@ -70,7 +65,6 @@ def step_2(padded_text):
 
         # Vòng lặp nén chính
         for i in range(80):
-            # SHA-1 có 4 vòng lặp với các hàm và hằng số khác nhau
             if 0 <= i <= 19:
                 f = ch(b, c, d)
                 k = 0x5A827999
@@ -106,7 +100,6 @@ def step_2(padded_text):
     return digest
 
 def sha1(text):
-    """Hàm chính thực hiện mã hóa SHA-1"""
     padded_text = step_1(text)
     digest = step_2(padded_text)
     return digest
