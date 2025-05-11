@@ -127,7 +127,7 @@ def step_2(padded_text):
     return digest
 
 if __name__ == '__main__':
-    text = input("Nhập xâu cần mã hóa")
+    text = input("Nhập xâu cần mã hóa: ")
     padded_text = step_1(text)
     digest = step_2(padded_text)
     print(digest)
