@@ -127,8 +127,9 @@ def step_2(padded_text):
     return digest
 
 if __name__ == '__main__':
-    text = input("Nhập xâu cần mã hóa: ")
+    print("Hàm băm SHA-256")
+    text = input("Nhập xâu cần băm: ")
     padded_text = step_1(text)
     digest = step_2(padded_text)
-    print(digest)
+    print(f"SHA-256: {digest}")
 

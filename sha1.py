@@ -40,7 +40,6 @@ def step_1(text):
     return padded_text
 
 def step_2(padded_text):
-    """Tạo lịch trình tin nhắn và thực hiện SHA-1"""
     # Sao chép dữ liệu từ bước 1 vào mảng mới, trong đó mỗi mục là 32 bit => mỗi khối là 64 byte => 512 bit
     blocks = []
     for i in range(0, len(padded_text), 64):
@@ -105,6 +104,7 @@ def sha1(text):
     return digest
 
 if __name__ == '__main__':
-    text = input("Nhập xâu cần mã hóa: ")
+    print("Hàm băm SHA-1")
+    text = input("Nhập xâu cần băm: ")
     digest = sha1(text)
     print(f"SHA-1: {digest}")
